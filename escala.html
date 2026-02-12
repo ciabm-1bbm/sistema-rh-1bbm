@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escala – RH 1º BBM</title>
+  <link rel="stylesheet" href="css/estilo.css">
+  <style>
+    .escala-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    .turno-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      background: #e0e0e0;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      margin: 2px;
+    }
+    .turno-1 { background: #bbdefb; }
+    .turno-2 { background: #c8e6c9; }
+    .turno-3 { background: #fff9c4; }
+    .turno-4 { background: #d1c4e9; }
+    .linha-escala {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <img src="https://ciabm-1bbm.github.io/site/logo-cbmrs.png" alt="CBMRS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-rs.png" alt="RS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-1bbm.png" alt="1º BBM" class="logo" onerror="this.style.display='none'">
+    </div>
+    <div class="titulo-sistema">
+      🚒 SISTEMA RH – 1º BBM
+    </div>
+    <div>
+      <button class="btn btn-primary" onclick="window.location.href='index.html'">🏠 Dashboard</button>
+    </div>
+  </div>
+
+  <h2 style="color: var(--azul-marinho); margin: 20px 0;">📅 ESCALA DE SERVIÇO – JANEIRO/2026</h2>
+
+  <div class="escala-grid">
+    <!-- Coluna 1: Formulário de lançamento -->
+    <div style="background: white; padding: 20px; border-radius: 10px;">
+      <h3 style="margin-bottom: 20px;">➕ Adicionar Serviço</h3>
+      
+      <div class="form-group">
+        <label for="data-escala">Data</label>
+        <input type="date" id="data-escala" value="2026-01-01">
+      </div>
+      
+      <div class="form-group">
+        <label for="id-militar">ID Funcional do Militar</label>
+        <input type="text" id="id-militar" placeholder="Ex: 12345" onblur="carregarDadosMilitar()">
+        <small id="nome-militar" style="display: block; margin-top: 5px; color: var(--azul-bombeiro);"></small>
+      </div>
+      
+      <div class="form-group">
+        <label for="funcao">Função na Guarnição</label>
+        <select id="funcao">
+          <option value="CG">CG (Comandante de Guarnição)</option>
+          <option value="COV">COV (Condutor/Operador)</option>
+          <option value="COV AEM">COV AEM (Auto Escada)</option>
+          <option value="Combatente">Combatente (Linha)</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="turno">Turno / Horário</label>
+        <select id="turno">
+          <option value="2,3,4">24h (08:00 às 08:00) – Turnos 2,3,4 + 1</option>
+          <option value="2,3">12h (08:00 às 20:00) – Turnos 2,3</option>
+          <option value="4,1">12h (20:00 às 08:00) – Turnos 4,1</option>
+          <option value="2">6h (08:00 às 14:00) – Turno 2</option>
+          <option value="3">6h (14:00 às 20:00) – Turno 3</option>
+          <option value="4">6h (20:00 às 02:00) – Turno 4</option>
+          <option value="1">6h (02:00 às 08:00) – Turno 1</option>
+        </select>
+      </div>
+      
+      <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="adicionarEscala()">
+        ✅ LANÇAR NA ESCALA
+      </button>
+      
+      <hr style="margin: 30px 0;">
+      
+      <div class="form-group">
+        <label for="calculo-he">⚡ Cálculo Automático de HE</label>
+        <button class="btn btn-primary" style="width: 100%;" onclick="calcularHE()">
+          🧮 Calcular Horas Extras do Mês
+        </button>
+      </div>
+    </div>
+    
+    <!-- Coluna 2: Visualização da escala do dia -->
+    <div style="background: white; padding: 20px; border-radius: 10px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3>📋 Escala do Dia</h3>
+        <div>
+          <label for="data-visualizar">Data:</label>
+          <input type="date" id="data-visualizar" value="2026-01-01" onchange="carregarEscalaDia()">
+        </div>
+      </div>
+      
+      <div id="escala-dia-container" style="min-height: 300px;">
+        <p style="color: #666; text-align: center;">Selecione uma data para visualizar a escala.</p>
+      </div>
+      
+      <div style="margin-top: 20px; text-align: right;">
+        <button class="btn btn-primary" onclick="window.location.href='relatorios.html'">
+          📄 Ver Relatórios
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rodape" style="margin-top: 50px;">
+    <p>📋 Instrução Reguladora nº 003/Adm/Exc-20 – Corpo de Bombeiros Militar do RS</p>
+    <p>© 2026 1º BBM – Sistema desenvolvido pela Seção de RH</p>
+  </div>
+
+  <script src="js/dados.js"></script>
+  <script src="js/calculos.js"></script>
+  <script>
+    // Armazenamento local da escala
+    let escalaDB = JSON.parse(localStorage.getItem('escala_1bbm')) || [];
+    
+    function carregarDadosMilitar() {
+      const id = document.getElementById('id-militar').value.trim();
+      const militar = buscarMilitarPorID(id);
+      const nomeSpan = document.getElementById('nome-militar');
+      
+      if (militar) {
+        nomeSpan.innerHTML = `✅ ${militar.nomeCompleto} (${militar.posto}) – HE: R$ ${militar.valorHoraExtra.toFixed(2)}`;
+      } else {
+        nomeSpan.innerHTML = `❌ Militar não encontrado`;
+      }
+    }
+    
+    function adicionarEscala() {
+      const data = document.getElementById('data-escala').value;
+      const id = document.getElementById('id-militar').value.trim();
+      const funcao = document.getElementById('funcao').value;
+      const turno = document.getElementById('turno').value;
+      
+      if (!id) {
+        alert('Digite o ID do militar');
+        return;
+      }
+      
+      const militar = buscarMilitarPorID(id);
+      if (!militar) {
+        alert('Militar não encontrado no cadastro');
+        return;
+      }
+      
+      // Adicionar à base local
+      escalaDB.push({
+        data: data,
+        idFunc: militar.idFunc,
+        nome: militar.nomeGuerra,
+        posto: militar.posto,
+        funcao: funcao,
+        turno: turno,
+        horas: calcularHorasPorTurno(turno)
+      });
+      
+      localStorage.setItem('escala_1bbm', JSON.stringify(escalaDB));
+      
+      alert(`✅ Escala lançada para ${militar.nomeGuerra} em ${data}`);
+      
+      // Limpar campo ID
+      document.getElementById('id-militar').value = '';
+      document.getElementById('nome-militar').innerHTML = '';
+      
+      // Atualizar visualização
+      carregarEscalaDia();
+    }
+    
+    function carregarEscalaDia() {
+      const data = document.getElementById('data-visualizar').value;
+      const escalaDia = escalaDB.filter(e => e.data === data);
+      const container = document.getElementById('escala-dia-container');
+      
+      if (escalaDia.length === 0) {
+        container.innerHTML = '<p style="color: #666; text-align: center;">Nenhum serviço lançado para esta data.</p>';
+        return;
+      }
+      
+      let html = '<table style="width: 100%;">';
+      html += '<tr><th>Militar</th><th>Posto</th><th>Função</th><th>Turno</th><th>Horas</th></tr>';
+      
+      escalaDia.forEach(e => {
+        html += `<tr>
+          <td>${e.nome}</td>
+          <td>${e.posto}</td>
+          <td>${e.funcao}</td>
+          <td>${e.turno}</td>
+          <td>${e.horas}h</td>
+        </tr>`;
+      });
+      
+      html += '</table>';
+      container.innerHTML = html;
+    }
+    
+    function calcularHE() {
+      const resultado = calcularTodasHE(escalaDB, efetivo, parametros);
+      alert(`🧮 Cálculo concluído!\n\nTotal de HE no mês: ${resultado.totalHE}h\nValor GSE: R$ ${resultado.totalGSE.toFixed(2)}\nTotal Etapas: ${resultado.totalEtapas}\nValor Etapas: R$ ${resultado.totalValorEtapas.toFixed(2)}`);
+      
+      // Salva no localStorage para relatórios
+      localStorage.setItem('resultado_he', JSON.stringify(resultado));
+    }
+    
+    // Inicializar visualização
+    window.onload = function() {
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('data-visualizar').value = '2026-01-01';
+      carregarEscalaDia();
+    };
+  </script>
+</body>
+</html>
