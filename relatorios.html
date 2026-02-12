@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapas e Anexos – RH 1º BBM</title>
+  <link rel="stylesheet" href="css/estilo.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <script src="js/dados.js"></script>
+  <script src="js/calculos.js"></script>
+  <style>
+    .anexo-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 8px solid var(--azul-bombeiro);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .btn-pdf {
+      background: #c41e3a;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-pdf:hover {
+      background: #8b0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <img src="https://ciabm-1bbm.github.io/site/logo-cbmrs.png" alt="CBMRS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-rs.png" alt="RS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-1bbm.png" alt="1º BBM" class="logo" onerror="this.style.display='none'">
+    </div>
+    <div class="titulo-sistema">🚒 SISTEMA RH – 1º BBM</div>
+    <div><button class="btn btn-primary" onclick="window.location.href='index.html'">🏠 Dashboard</button></div>
+  </div>
+
+  <h2 style="color: var(--azul-marinho); margin: 20px 0;">📄 MAPAS E ANEXOS OFICIAIS – IR 003</h2>
+
+  <!-- ANEXO A – Mapa de Pagamento de GSE -->
+  <div class="anexo-card" id="anexo-a">
+    <h3>📋 ANEXO A – Mapa de Pagamento de Gratificação por Serviço Extraordinário</h3>
+    <button class="btn-pdf" onclick="gerarPDF_AnexoA()">📄 GERAR PDF – ANEXO A</button>
+  </div>
+
+  <!-- ANEXO B – Mapa de Escala de Serviço Executada -->
+  <div class="anexo-card" id="anexo-b">
+    <h3>📅 ANEXO B – Mapa de Escala de Serviço Executada</h3>
+    <button class="btn-pdf" onclick="gerarPDF_AnexoB()">📄 GERAR PDF – ANEXO B</button>
+  </div>
+
+  <!-- ANEXO C – Extrato Demonstrativo de Carga Horária -->
+  <div class="anexo-card" id="anexo-c">
+    <h3>📊 ANEXO C – Extrato Demonstrativo de Carga Horária</h3>
+    <button class="btn-pdf" onclick="gerarPDF_AnexoC()">📄 GERAR PDF – ANEXO C</button>
+  </div>
+
+  <!-- ANEXO E – Fluxograma de Processamento (Modelo) -->
+  <div class="anexo-card" id="anexo-e">
+    <h3>🔄 ANEXO E – Fluxograma de Processamento da GSE</h3>
+    <button class="btn-pdf" onclick="gerarPDF_AnexoE()">📄 GERAR PDF – ANEXO E</button>
+  </div>
+
+  <!-- ANEXO F – Formulário de Cadastro de Credor (AFE) -->
+  <div class="anexo-card" id="anexo-f">
+    <h3>📝 ANEXO F – Formulário para Inclusão/Alteração de Cadastro de Credor</h3>
+    <button class="btn-pdf" onclick="gerarPDF_AnexoF()">📄 GERAR PDF – ANEXO F</button>
+  </div>
+
+  <!-- ANEXO G – Mapa de Saque de Etapas de Alimentação -->
+  <div class="anexo-card" id="anexo-g">
+    <h3>🍽️ ANEXO G – Mapa de Saque de Etapas de Alimentação</h3>
+    <button class="btn-pdf" onclick="gerarPDF_AnexoG()">📄 GERAR PDF – ANEXO G</button>
+  </div>
+
+  <!-- ANEXO I – Justificativas para Extensão da Jornada -->
+  <div class="anexo-card" id="anexo-i">
+    <h3>📌 ANEXO I – Justificativas para Extensão da Jornada Normal de Trabalho</h3>
+    <button class="btn-pdf" onclick="gerarPDF_AnexoI()">📄 GERAR PDF – ANEXO I</button>
+  </div>
+
+  <script>
+    // ========== ANEXO A ==========
+    function gerarPDF_AnexoA() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.text('ESTADO DO RIO GRANDE DO SUL', 105, 15, { align: 'center' });
+      doc.setFontSize(14);
+      doc.text('SECRETARIA DA SEGURANÇA PÚBLICA', 105, 22, { align: 'center' });
+      doc.text('CORPO DE BOMBEIROS MILITAR – 1º BBM', 105, 29, { align: 'center' });
+      
+      doc.setFontSize(12);
+      doc.text('ANEXO “A” – MAPA DE PAGAMENTO DE GRATIFICAÇÃO POR SERVIÇO EXTRAORDINÁRIO', 105, 40, { align: 'center' });
+      doc.text('REFERENTE AO MÊS DE: JANEIRO/2026', 105, 47, { align: 'center' });
+      
+      doc.setFont('helvetica', 'normal');
+      const resultado = JSON.parse(localStorage.getItem('resultado_he')) || { totalHE: 0, totalGSE: 0 };
+      
+      let y = 60;
+      doc.text('1. Atesto a legalidade da despesa.', 20, y);
+      y += 7;
+      doc.text('2. Proceda-se o pagamento.', 20, y);
+      y += 15;
+      
+      doc.text('Em: ____/____/______', 20, y);
+      y += 10;
+      doc.text('__________________________________________________', 20, y);
+      y += 7;
+      doc.text('[NOME DO COMANDANTE] – TEN CEL QOEM', 20, y);
+      y += 5;
+      doc.text('Comandante do 1º BBM', 20, y);
+      
+      y += 20;
+      doc.text(`Total de Horas Extras no mês: ${resultado.totalHE}h`, 20, y);
+      y += 7;
+      doc.text(`Valor Total GSE: R$ ${resultado.totalGSE.toFixed(2)}`, 20, y);
+      
+      doc.save('ANEXO_A_GSE_JANEIRO_2026.pdf');
+    }
+
+    // ========== ANEXO B ==========
+    function gerarPDF_AnexoB() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('landscape');
+      
+      doc.setFontSize(16);
+      doc.text('ANEXO “B” – MAPA DE ESCALA DE SERVIÇO EXECUTADA', 105, 15, { align: 'center' });
+      doc.setFontSize(12);
+      doc.text('1º Batalhão de Bombeiro Militar – JANEIRO/2026', 105, 25, { align: 'center' });
+      
+      const escalaDB = JSON.parse(localStorage.getItem('escala_1bbm')) || [];
+      
+      const headers = [['Data', 'ID Func', 'Nome', 'Posto', 'Pelotão', 'Função', 'Turno', 'Horas']];
+      const data = escalaDB.map(e => [
+        e.data, e.idFunc, e.nome, e.posto, e.pelotao || '', e.funcao, e.turno, `${e.horas}h`
+      ]);
+      
+      doc.autoTable({
+        head: headers,
+        body: data,
+        startY: 35,
+        theme: 'grid',
+        styles: { fontSize: 8, cellPadding: 2 },
+        headStyles: { fillColor: [26, 44, 78] }
+      });
+      
+      doc.save('ANEXO_B_ESCALA_JANEIRO_2026.pdf');
+    }
+
+    // ========== ANEXO C ==========
+    function gerarPDF_AnexoC() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text('ANEXO “C” – EXTRATO DEMONSTRATIVO DE CARGA HORÁRIA', 105, 15, { align: 'center' });
+      doc.setFontSize(12);
+      doc.text('1º Batalhão de Bombeiro Militar – JANEIRO/2026', 105, 25, { align: 'center' });
+      
+      // Dados resumidos
+      const resultado = JSON.parse(localStorage.getItem('resultado_he')) || { totalHE: 0, totalGSE: 0, totalEtapas: 0, totalValorEtapas: 0 };
+      
+      let y = 45;
+      doc.setFont('helvetica', 'bold');
+      doc.text('RESUMO DO MÊS:', 20, y);
+      doc.setFont('helvetica', 'normal');
+      y += 10;
+      doc.text(`Carga horária obrigatória (31 dias): 177h`, 20, y);
+      y += 7;
+      doc.text(`Total de horas trabalhadas: ${resultado.totalHE + 177}h`, 20, y);
+      y += 7;
+      doc.text(`Horas extras: ${resultado.totalHE}h`, 20, y);
+      y += 7;
+      doc.text(`Valor da GSE: R$ ${resultado.totalGSE.toFixed(2)}`, 20, y);
+      y += 7;
+      doc.text(`Total de etapas de alimentação: ${resultado.totalEtapas}`, 20, y);
+      y += 7;
+      doc.text(`Valor das etapas: R$ ${resultado.totalValorEtapas.toFixed(2)}`, 20, y);
+      
+      doc.save('ANEXO_C_EXTRATO_JANEIRO_2026.pdf');
+    }
+
+    // ========== ANEXO E ==========
+    function gerarPDF_AnexoE() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text('ANEXO “E” – FLUXOGRAMA DE PROCESSAMENTO DA GSE', 105, 15, { align: 'center' });
+      doc.setFontSize(12);
+      
+      let y = 40;
+      doc.setFont('helvetica', 'bold');
+      doc.text('FLUXOGRAMA DE PROCESSAMENTO DA GRATIFICAÇÃO POR SERVIÇO EXTRAORDINÁRIO NO CBMRS', 20, y);
+      y += 15;
+      
+      doc.setFont('helvetica', 'normal');
+      const etapas = [
+        '1. O Comando da Corporação solicita autorização para execução de serviço extraordinário em cotas mensais.',
+        '2. O Subcomandante-Geral define a cota-referência de cada Batalhão.',
+        '3. O Departamento Administrativo distribui as cotas aos Batalhões.',
+        '4. O Comando do OBM atesta a legalidade da despesa e lança no sistema RHE.',
+        '5. O DA executa a rotina no sistema RHE para migração das informações para a folha.',
+        '6. Em caso de impossibilidade de lançamento, processo via PROA é encaminhado ao DA.',
+        '7. Identificado lançamento indevido, o Comandante solicita estorno via PROA.'
+      ];
+      
+      etapas.forEach(etapa => {
+        doc.text(etapa, 25, y);
+        y += 8;
+      });
+      
+      doc.save('ANEXO_E_FLUXOGRAMA_GSE.pdf');
+    }
+
+    // ========== ANEXO F ==========
+    function gerarPDF_AnexoF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text('ANEXO “F” – FORMULÁRIO DE CADASTRO DE CREDOR (AFE)', 105, 15, { align: 'center' });
+      doc.setFontSize(12);
+      doc.text('ESTADO DO RIO GRANDE DO SUL – SECRETARIA DA FAZENDA', 105, 25, { align: 'center' });
+      doc.text('SECCIONAL DA CAGE – BM', 105, 32, { align: 'center' });
+      
+      let y = 50;
+      doc.setFont('helvetica', 'bold');
+      doc.text('Nome: ____________________________________________________', 20, y);
+      y += 10;
+      doc.text('CPF/CNPJ: ___________________________ Código de Pessoa: ______________', 20, y);
+      y += 10;
+      doc.text('Telefone: ___________________________', 20, y);
+      y += 20;
+      
+      doc.setFont('helvetica', 'normal');
+      doc.text('Solicito à Seccional da CAGE junto à Brigada Militar do RS a inclusão ou alteração de meu', 20, y);
+      y += 7;
+      doc.text('cadastro no AFE/FPE, declarando serem verdadeiras as informações abaixo. Anexo cópias', 20, y);
+      y += 7;
+      doc.text('legíveis dos seguintes documentos, declarando que são fiéis aos originais:', 20, y);
+      y += 15;
+      
+      doc.text('( ) Cópia identidade funcional ou civil', 25, y);
+      y += 7;
+      doc.text('( ) Cópia CPF/CNPJ', 25, y);
+      y += 7;
+      doc.text('( ) Comprovante de residência', 25, y);
+      y += 7;
+      doc.text('( ) Extrato bancário/folha de cheque/contracheque com conta atualizada', 25, y);
+      
+      y += 20;
+      doc.text('Assinatura do servidor solicitante: ______________________________', 20, y);
+      
+      doc.save('ANEXO_F_CADASTRO_CREDOR.pdf');
+    }
+
+    // ========== ANEXO G ==========
+    function gerarPDF_AnexoG() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text('ANEXO “G” – MAPA DE SAQUE DE ETAPAS DE ALIMENTAÇÃO', 105, 15, { align: 'center' });
+      doc.setFontSize(12);
+      doc.text('1º Batalhão de Bombeiro Militar – JANEIRO/2026', 105, 25, { align: 'center' });
+      
+      const resultado = JSON.parse(localStorage.getItem('resultado_he')) || { totalEtapas: 0, totalValorEtapas: 0 };
+      
+      let y = 45;
+      doc.text('1. Atesto a legalidade da despesa.', 20, y);
+      y += 7;
+      doc.text('2. Proceda-se o pagamento.', 20, y);
+      y += 10;
+      doc.text('Em: ____/____/______', 20, y);
+      y += 15;
+      
+      doc.setFont('helvetica', 'bold');
+      doc.text('MAPA DE SAQUE DE ETAPAS DE ALIMENTAÇÃO', 20, y);
+      y += 10;
+      doc.setFont('helvetica', 'normal');
+      
+      doc.text(`Total de etapas no mês: ${resultado.totalEtapas}`, 20, y);
+      y += 7;
+      doc.text(`Valor total: R$ ${resultado.totalValorEtapas.toFixed(2)}`, 20, y);
+      y += 7;
+      doc.text(`(Valor unitário: R$ 12,79)`, 20, y);
+      
+      y += 15;
+      doc.text('Certifico que as etapas de alimentação inseridas se adequam às hipóteses do art. 63 da Lei nº 6.196/71.', 20, y);
+      
+      doc.save('ANEXO_G_ETAPAS_JANEIRO_2026.pdf');
+    }
+
+    // ========== ANEXO I ==========
+    function gerarPDF_AnexoI() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text('ANEXO “I” – JUSTIFICATIVAS PARA EXTENSÃO DA JORNADA', 105, 15, { align: 'center' });
+      doc.setFontSize(12);
+      doc.text('1º Batalhão de Bombeiro Militar – JANEIRO/2026', 105, 25, { align: 'center' });
+      
+      let y = 45;
+      doc.setFont('helvetica', 'bold');
+      doc.text('JUSTIFICATIVAS PARA SERVIÇO EXTRAORDINÁRIO:', 20, y);
+      y += 10;
+      doc.setFont('helvetica', 'normal');
+      
+      const justificativas = [
+        'a) Atender a situações excepcionais e temporárias (caput, art. 2º, Decreto 40.986/01);',
+        'b) Imperiosa necessidade de serviço ligada à atividade fim do CBMRS;',
+        'c) Manter a normalidade dos serviços (§4º, art. 2º);',
+        'd) Dar curso a ocorrências já iniciadas;',
+        'e) Fazer frente a situações imprevistas que atentem contra a vida e/ou a segurança pública.'
+      ];
+      
+      justificativas.forEach(j => {
+        doc.text(j, 25, y);
+        y += 7;
+      });
+      
+      y += 15;
+      doc.setFont('helvetica', 'bold');
+      doc.text('VEDAÇÕES (Decreto nº 40.986/01):', 20, y);
+      y += 10;
+      doc.setFont('helvetica', 'normal');
+      
+      const vedacoes = [
+        '- Quando não houver justificativa sobre a imprescindibilidade da extensão;',
+        '- Aos servidores que estiverem percebendo diárias de viagem;',
+        '- Detentores de função gratificada ou cargo em comissão (exceto oficiais intermediários, subalternos e praças em função de comando);',
+        '- Para desenvolvimento de atividades administrativas do CBMRS;',
+        '- Sem prévia autorização.'
+      ];
+      
+      vedacoes.forEach(v => {
+        doc.text(v, 25, y);
+        y += 6;
+      });
+      
+      doc.save('ANEXO_I_JUSTIFICATIVAS_JANEIRO_2026.pdf');
+    }
+  </script>
+</body>
+</html>
