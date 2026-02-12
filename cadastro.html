@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro – RH 1º BBM</title>
+  <link rel="stylesheet" href="css/estilo.css">
+  <style>
+    .pelotao-tab {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      padding: 10px 15px;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .tab-btn.active {
+      background: var(--azul-bombeiro);
+      color: white;
+    }
+    .resumo-pelotao {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <img src="https://ciabm-1bbm.github.io/site/logo-cbmrs.png" alt="CBMRS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-rs.png" alt="RS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-1bbm.png" alt="1º BBM" class="logo" onerror="this.style.display='none'">
+    </div>
+    <div class="titulo-sistema">🚒 SISTEMA RH – 1º BBM</div>
+    <div><button class="btn btn-primary" onclick="window.location.href='index.html'">🏠 Dashboard</button></div>
+  </div>
+
+  <h2 style="color: var(--azul-marinho);">👥 EFETIVO DO 1º BBM – POR PELOTÃO</h2>
+
+  <!-- Tabs de pelotão -->
+  <div class="pelotao-tab" id="pelotao-tabs"></div>
+
+  <!-- Resumo do pelotão selecionado -->
+  <div id="resumo-pelotao" class="resumo-pelotao"></div>
+
+  <!-- Tabela do efetivo -->
+  <div class="tabela-container">
+    <table id="tabela-efetivo">
+      <thead>
+        <tr>
+          <th>ID Func</th>
+          <th>Nome (Guerra)</th>
+          <th>Posto</th>
+          <th>Função</th>
+          <th>COV?</th>
+          <th>AEM?</th>
+          <th>ADM?</th>
+          <th>Valor HE</th>
+          <th>Situação</th>
+        </tr>
+      </thead>
+      <tbody id="corpo-tabela"></tbody>
+    </table>
+  </div>
+
+  <script src="js/efetivo_real.js"></script>
+  <script>
+    // Usar o efetivo real
+    const efetivo = efetivoReal;
+    
+    // Lista única de pelotões (excluindo administrativos se quiser)
+    const pelotoes = [...new Set(efetivo.map(m => m.pelotao))].filter(p => 
+      !p.includes('AFAST') && !p.includes('SADM') && !p.includes('CIABM') && !p.includes('ADJUNTO')
+    ).sort();
+    
+    let pelotaoAtivo = pelotoes[0] || 'AÇORIANOS';
+
+    function renderTabs() {
+      const tabsContainer = document.getElementById('pelotao-tabs');
+      let html = '';
+      pelotoes.forEach(p => {
+        html += `<button class="tab-btn ${p === pelotaoAtivo ? 'active' : ''}" onclick="selecionarPelotao('${p}')">${p}</button>`;
+      });
+      tabsContainer.innerHTML = html;
+    }
+
+    function selecionarPelotao(pelotao) {
+      pelotaoAtivo = pelotao;
+      renderTabs();
+      renderResumo();
+      renderTabela();
+    }
+
+    function renderResumo() {
+      const militaresPelotao = efetivo.filter(m => m.pelotao === pelotaoAtivo && m.situacao === 'Ativo');
+      const covs = militaresPelotao.filter(m => m.isCOV).length;
+      const combatentes = militaresPelotao.filter(m => !m.isCOV && m.funcaoPadrao !== 'Oficial').length;
+      const oficiais = militaresPelotao.filter(m => m.funcaoPadrao === 'Oficial').length;
+      const afastados = efetivo.filter(m => m.pelotao === pelotaoAtivo && m.situacao !== 'Ativo').length;
+      
+      const resumo = document.getElementById('resumo-pelotao');
+      resumo.innerHTML = `
+        <div><strong>Total Ativos:</strong> ${militaresPelotao.length}</div>
+        <div><strong>COVs:</strong> ${covs} 🚒</div>
+        <div><strong>Combatentes:</strong> ${combatentes} 🔥</div>
+        <div><strong>Oficiais:</strong> ${oficiais} ⭐</div>
+        <div><strong>Afastados:</strong> ${afastados} 🟡</div>
+        <div><strong>Necessidade Mínima:</strong> 2 COVs / 4 Combatentes</div>
+        <div style="color: ${covs >= 2 ? '#2e7d32' : '#c41e3a'};"><strong>Status COV:</strong> ${covs >= 2 ? '✅ OK' : '🔴 DÉFICIT'}</div>
+      `;
+    }
+
+    function renderTabela() {
+      const militares = efetivo.filter(m => m.pelotao === pelotaoAtivo);
+      const tbody = document.getElementById('corpo-tabela');
+      
+      let html = '';
+      militares.forEach(m => {
+        const badgeSituacao = m.situacao === 'Ativo' ? 'badge-ativo' : 'badge-ferias';
+        html += `<tr style="${m.situacao !== 'Ativo' ? 'opacity: 0.7;' : ''}">
+          <td><strong>${m.idFunc}</strong></td>
+          <td>${m.nomeCompleto} (${m.nomeGuerra})</td>
+          <td>${m.posto}</td>
+          <td>${m.funcaoPadrao}</td>
+          <td>${m.isCOV ? '✅' : '❌'}</td>
+          <td>${m.isAEM ? '✅' : '❌'}</td>
+          <td>${m.isADM ? '✅' : '❌'}</td>
+          <td>R$ ${m.valorHoraExtra.toFixed(2)}</td>
+          <td><span class="badge ${badgeSituacao}">${m.situacao}</span></td>
+        </tr>`;
+      });
+      tbody.innerHTML = html;
+    }
+
+    // Inicialização
+    window.onload = function() {
+      renderTabs();
+      renderResumo();
+      renderTabela();
+    };
+  </script>
+</body>
+</html>
