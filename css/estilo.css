@@ -1,0 +1,251 @@
+/* ========== SISTEMA RH 1º BBM ========== */
+/* ESTILO PROFISSIONAL – CORES INSTITUCIONAIS */
+
+:root {
+  --azul-marinho: #1a2c4e;
+  --azul-bombeiro: #0b5394;
+  --vermelho: #c41e3a;
+  --verde: #2e7d32;
+  --amarelo: #b76e1e;
+  --cinza: #f5f5f5;
+  --branco: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'Poppins', Arial, sans-serif;
+}
+
+body {
+  background-color: var(--cinza);
+  padding: 20px;
+}
+
+/* Cabeçalho com logos */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--azul-marinho);
+  color: var(--branco);
+  padding: 15px 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.logo-container {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.logo {
+  height: 60px;
+  width: auto;
+}
+
+.titulo-sistema {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Cards do dashboard */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--branco);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-left: 5px solid var(--azul-bombeiro);
+}
+
+.card h3 {
+  color: var(--azul-marinho);
+  font-size: 1rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card .valor {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--azul-marinho);
+}
+
+.card .status {
+  font-size: 0.9rem;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.status.verde { background: #c8e6c9; color: #1e3a1e; }
+.status.amarelo { background: #fff3e0; color: #b76e1e; }
+.status.vermelho { background: #ffcdd2; color: #b71c1c; }
+
+/* Menu de navegação */
+.menu {
+  background: var(--branco);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--azul-bombeiro);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--azul-marinho);
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: var(--verde);
+  color: white;
+}
+
+.btn-warning {
+  background: var(--amarelo);
+  color: white;
+}
+
+/* Tabelas */
+.tabela-container {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: var(--azul-marinho);
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+  background: #f5f5f5;
+}
+
+/* Formulários */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: var(--azul-marinho);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+input:focus, select:focus {
+  border-color: var(--azul-bombeiro);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(11,83,148,0.2);
+}
+
+/* Alertas */
+.alerta {
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.alerta-verde {
+  background: #c8e6c9;
+  color: #1e3a1e;
+  border-left: 5px solid #2e7d32;
+}
+
+.alerta-amarelo {
+  background: #fff3e0;
+  color: #b76e1e;
+  border-left: 5px solid #ed6c02;
+}
+
+.alerta-vermelho {
+  background: #ffcdd2;
+  color: #b71c1c;
+  border-left: 5px solid #d32f2f;
+}
+
+/* Rodapé */
+.rodape {
+  margin-top: 50px;
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-size: 0.9rem;
+  border-top: 1px solid #ddd;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+  
+  .menu {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
