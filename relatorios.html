@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatórios – RH 1º BBM</title>
+  <link rel="stylesheet" href="css/estilo.css">
+  <!-- Biblioteca jsPDF para gerar PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    .mapa-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-left: 5px solid var(--azul-bombeiro);
+    }
+    .mapa-titulo {
+      font-weight: 700;
+      color: var(--azul-marinho);
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+    .btn-pdf {
+      background: #d32f2f;
+      color: white;
+    }
+    .btn-pdf:hover {
+      background: #b71c1c;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <img src="https://ciabm-1bbm.github.io/site/logo-cbmrs.png" alt="CBMRS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-rs.png" alt="RS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-1bbm.png" alt="1º BBM" class="logo" onerror="this.style.display='none'">
+    </div>
+    <div class="titulo-sistema">
+      🚒 SISTEMA RH – 1º BBM
+    </div>
+    <div>
+      <button class="btn btn-primary" onclick="window.location.href='index.html'">🏠 Dashboard</button>
+    </div>
+  </div>
+
+  <h2 style="color: var(--azul-marinho); margin: 20px 0;">📄 MAPAS E RELATÓRIOS – JANEIRO/2026</h2>
+
+  <!-- Card Resumo de Cálculos -->
+  <div class="mapa-card">
+    <div class="mapa-titulo">📊 RESUMO DO MÊS</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;" id="resumo-mensal">
+      <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+        <div style="font-size: 0.8rem; color: #555;">TOTAL HE</div>
+        <div style="font-size: 1.8rem; font-weight: 700; color: var(--azul-marinho);" id="resumo-he">0h</div>
+      </div>
+      <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+        <div style="font-size: 0.8rem; color: #555;">GSE</div>
+        <div style="font-size: 1.8rem; font-weight: 700; color: var(--verde);" id="resumo-gse">R$ 0</div>
+      </div>
+      <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
+        <div style="font-size: 0.8rem; color: #555;">ETAPAS</div>
+        <div style="font-size: 1.8rem; font-weight: 700; color: #b76e1e;" id="resumo-etapas">0</div>
+      </div>
+      <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
+        <div style="font-size: 0.8rem; color: #555;">VALOR ETAPAS</div>
+        <div style="font-size: 1.8rem; font-weight: 700; color: #6a1b9a;" id="resumo-valor-etapas">R$ 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anexo A – Mapa de Pagamento GSE -->
+  <div class="mapa-card" id="anexo-a">
+    <div class="mapa-titulo">📋 ANEXO A – Mapa de Pagamento de Gratificação por Serviço Extraordinário</div>
+    <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 5px;">
+      <pre style="font-family: monospace; white-space: pre-wrap;">
+ESTADO DO RIO GRANDE DO SUL – SSP – CBMRS
+1º BATALHÃO DE BOMBEIRO MILITAR
+
+MAPA DE PAGAMENTO DE GRATIFICAÇÃO POR SERVIÇO EXTRAORDINÁRIO
+REFERENTE AO MÊS DE: JANEIRO 2026
+
+1. Atesto a legalidade da despesa.
+2. Proceda-se o pagamento.
+
+Em: ____/____/______
+
+[Nome do Comandante] – Ten Cel QOEM – Comandante do 1º BBM
+
+--------------------------------------------------------
+ID Func | Posto/Grad | Nome Completo | Horas Extras | Valor
+--------------------------------------------------------
+      </pre>
+    </div>
+    <button class="btn btn-pdf" onclick="gerarPDFanexoA()">
+      📄 GERAR PDF – ANEXO A
+    </button>
+  </div>
+
+  <!-- Anexo B – Mapa de Escala Executada -->
+  <div class="mapa-card">
+    <div class="mapa-titulo">📅 ANEXO B – Mapa de Escala de Serviço Executada</div>
+    <button class="btn btn-pdf" onclick="gerarPDFanexoB()">
+      📄 GERAR PDF – ANEXO B
+    </button>
+  </div>
+
+  <!-- Anexo C – Extrato Demonstrativo de Carga Horária -->
+  <div class="mapa-card">
+    <div class="mapa-titulo">📊 ANEXO C – Extrato Demonstrativo de Carga Horária</div>
+    <button class="btn btn-pdf" onclick="gerarPDFanexoC()">
+      📄 GERAR PDF – ANEXO C
+    </button>
+  </div>
+
+  <!-- Anexo G – Mapa de Saque de Etapas de Alimentação -->
+  <div class="mapa-card">
+    <div class="mapa-titulo">🍽️ ANEXO G – Mapa de Saque de Etapas de Alimentação</div>
+    <button class="btn btn-pdf" onclick="gerarPDFanexoG()">
+      📄 GERAR PDF – ANEXO G
+    </button>
+  </div>
+
+  <!-- Anexo H – Mapa de Indisponibilidade -->
+  <div class="mapa-card">
+    <div class="mapa-titulo">🟡 ANEXO H – Mapa de Indisponibilidade</div>
+    <button class="btn btn-pdf" onclick="gerarPDFanexoH()">
+      📄 GERAR PDF – ANEXO H
+    </button>
+  </div>
+
+  <!-- Anexo I – Justificativas para Extensão de Jornada -->
+  <div class="mapa-card">
+    <div class="mapa-titulo">📌 ANEXO I – Justificativas para Extensão da Jornada Normal de Trabalho</div>
+    <button class="btn btn-pdf" onclick="gerarPDFanexoI()">
+      📄 GERAR PDF – ANEXO I
+    </button>
+  </div>
+
+  <div class="rodape">
+    <p>📋 Instrução Reguladora nº 003/Adm/Exc-20 – Corpo de Bombeiros Militar do RS</p>
+    <p>© 2026 1º BBM – Sistema desenvolvido pela Seção de RH</p>
+  </div>
+
+  <script src="js/dados.js"></script>
+  <script src="js/calculos.js"></script>
+  <script src="js/pdf.js"></script>
+  <script>
+    window.onload = function() {
+      // Carregar resumo do localStorage (gerado na página escala)
+      const resultado = JSON.parse(localStorage.getItem('resultado_he')) || {
+        totalHE: '0',
+        totalGSE: 0,
+        totalEtapas: 0,
+        totalValorEtapas: 0
+      };
+      
+      document.getElementById('resumo-he').innerText = resultado.totalHE + 'h';
+      document.getElementById('resumo-gse').innerText = 'R$ ' + resultado.totalGSE.toFixed(2);
+      document.getElementById('resumo-etapas').innerText = resultado.totalEtapas;
+      document.getElementById('resumo-valor-etapas').innerText = 'R$ ' + resultado.totalValorEtapas.toFixed(2);
+    };
+  </script>
+</body>
+</html>
