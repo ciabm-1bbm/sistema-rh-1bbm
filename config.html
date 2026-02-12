@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações – RH 1º BBM</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <img src="https://ciabm-1bbm.github.io/site/logo-cbmrs.png" alt="CBMRS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-rs.png" alt="RS" class="logo" onerror="this.style.display='none'">
+      <img src="https://ciabm-1bbm.github.io/site/brasao-1bbm.png" alt="1º BBM" class="logo" onerror="this.style.display='none'">
+    </div>
+    <div class="titulo-sistema">
+      🚒 SISTEMA RH – 1º BBM
+    </div>
+    <div>
+      <button class="btn btn-primary" onclick="window.location.href='index.html'">🏠 Dashboard</button>
+    </div>
+  </div>
+
+  <h2 style="color: var(--azul-marinho); margin: 20px 0;">⚙️ PARÂMETROS DO SISTEMA</h2>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <!-- Coluna 1: Parâmetros Gerais -->
+    <div style="background: white; padding: 25px; border-radius: 10px;">
+      <h3 style="margin-bottom: 20px; color: var(--azul-bombeiro);">💰 Valores Financeiros</h3>
+      
+      <div class="form-group">
+        <label>Cota GSE do 1º BBM (R$)</label>
+        <input type="number" id="cota-gse" step="0.01" value="299234.47">
+      </div>
+      
+      <div class="form-group">
+        <label>Valor da Etapa de Alimentação (R$)</label>
+        <input type="number" id="valor-etapa" step="0.01" value="12.79">
+      </div>
+      
+      <h3 style="margin: 30px 0 20px; color: var(--azul-bombeiro);">⏱️ Carga Horária Mensal</h3>
+      
+      <div class="form-group">
+        <label>28 dias (Fevereiro)</label>
+        <input type="number" id="carga-28" value="160">
+      </div>
+      <div class="form-group">
+        <label>29 dias</label>
+        <input type="number" id="carga-29" value="165">
+      </div>
+      <div class="form-group">
+        <label>30 dias</label>
+        <input type="number" id="carga-30" value="171">
+      </div>
+      <div class="form-group">
+        <label>31 dias</label>
+        <input type="number" id="carga-31" value="177">
+      </div>
+      
+      <div class="form-group">
+        <label>Horas por dia de indisponibilidade</label>
+        <input type="number" id="horas-indisponivel" step="0.1" value="5.7">
+      </div>
+    </div>
+    
+    <!-- Coluna 2: Valores de Hora Extra e Justificativas -->
+    <div style="background: white; padding: 25px; border-radius: 10px;">
+      <h3 style="margin-bottom: 20px; color: var(--azul-bombeiro);">⭐ Valor da Hora Extra por Posto</h3>
+      
+      <div class="form-group">
+        <label>Soldado (Sd)</label>
+        <input type="number" id="he-sd" step="0.01" value="46.37">
+      </div>
+      <div class="form-group">
+        <label>Soldado Especial (Sd Esp)</label>
+        <input type="number" id="he-sd-esp" step="0.01" value="57.62">
+      </div>
+      <div class="form-group">
+        <label>3º Sargento</label>
+        <input type="number" id="he-3sgt" step="0.01" value="67.22">
+      </div>
+      <div class="form-group">
+        <label>2º Sargento</label>
+        <input type="number" id="he-2sgt" step="0.01" value="74.42">
+      </div>
+      <div class="form-group">
+        <label>1º Sargento</label>
+        <input type="number" id="he-1sgt" step="0.01" value="79.22">
+      </div>
+      <div class="form-group">
+        <label>1º Tenente</label>
+        <input type="number" id="he-1ten" step="0.01" value="108.03">
+      </div>
+      
+      <h3 style="margin: 30px 0 20px; color: var(--azul-bombeiro);">📌 Justificativas Padrão (Anexo I)</h3>
+      
+      <div class="form-group">
+        <label>Justificativa 1</label>
+        <input type="text" id="just1" value="Atender situações excepcionais e temporárias">
+      </div>
+      <div class="form-group">
+        <label>Justificativa 2</label>
+        <input type="text" id="just2" value="Imperiosa necessidade de serviço - atividade fim">
+      </div>
+      <div class="form-group">
+        <label>Justificativa 3</label>
+        <input type="text" id="just3" value="Manter normalidade dos serviços">
+      </div>
+      <div class="form-group">
+        <label>Justificativa 4</label>
+        <input type="text" id="just4" value="Dar curso a ocorrências já iniciadas">
+      </div>
+      <div class="form-group">
+        <label>Justificativa 5</label>
+        <input type="text" id="just5" value="Situações imprevistas - vida/segurança pública">
+      </div>
+    </div>
+  </div>
+  
+  <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: flex-end;">
+    <button class="btn btn-success" onclick="salvarParametros()">💾 SALVAR ALTERAÇÕES</button>
+    <button class="btn btn-primary" onclick="window.location.href='index.html'">🔙 VOLTAR</button>
+  </div>
+
+  <div class="rodape" style="margin-top: 50px;">
+    <p>📋 Instrução Reguladora nº 003/Adm/Exc-20 – Corpo de Bombeiros Militar do RS</p>
+    <p>© 2026 1º BBM – Sistema desenvolvido pela Seção de RH</p>
+  </div>
+
+  <script src="js/dados.js"></script>
+  <script>
+    function salvarParametros() {
+      // Aqui você pode implementar a lógica para salvar no localStorage
+      alert('✅ Parâmetros salvos com sucesso!\n(Esta é uma simulação – em produção, os valores seriam persistidos.)');
+      
+      // Exemplo: salvar no localStorage
+      const novosParametros = {
+        cotaGSE: parseFloat(document.getElementById('cota-gse').value),
+        valorEtapa: parseFloat(document.getElementById('valor-etapa').value),
+        carga28: parseInt(document.getElementById('carga-28').value),
+        carga29: parseInt(document.getElementById('carga-29').value),
+        carga30: parseInt(document.getElementById('carga-30').value),
+        carga31: parseInt(document.getElementById('carga-31').value),
+        horasIndisponivel: parseFloat(document.getElementById('horas-indisponivel').value),
+        heSd: parseFloat(document.getElementById('he-sd').value),
+        heSdEsp: parseFloat(document.getElementById('he-sd-esp').value),
+        he3Sgt: parseFloat(document.getElementById('he-3sgt').value),
+        he2Sgt: parseFloat(document.getElementById('he-2sgt').value),
+        he1Sgt: parseFloat(document.getElementById('he-1sgt').value),
+        he1Ten: parseFloat(document.getElementById('he-1ten').value),
+        justificativas: [
+          document.getElementById('just1').value,
+          document.getElementById('just2').value,
+          document.getElementById('just3').value,
+          document.getElementById('just4').value,
+          document.getElementById('just5').value
+        ]
+      };
+      
+      localStorage.setItem('parametros_rh', JSON.stringify(novosParametros));
+    }
+  </script>
+</body>
+</html>
